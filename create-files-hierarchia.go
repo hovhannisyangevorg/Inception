@@ -1,22 +1,20 @@
 package main
 
+
 import (
-    "os"
+	"os"
 )
 
 func main() {
     // Create directory structure
     directories := []string {
         "srcs/requirements/bonus",
-
 		"srcs/requirements/mariadb",
         "srcs/requirements/mariadb/conf",
         "srcs/requirements/mariadb/tools",
-
 		"srcs/requirements/nginx",
         "srcs/requirements/nginx/conf",
         "srcs/requirements/nginx/tools",
-	
         "srcs/requirements/wordpress",
 		"srcs/requirements/wordpress/conf",
 		"srcs/requirements/wordpress/tools",
@@ -29,18 +27,15 @@ func main() {
     files := []string{
         "Makefile",
         "srcs/docker-compose.yml",
-        "srcs/.env",
-
+        "srcs/.env-define",
         "srcs/requirements/mariadb/Dockerfile",
         "srcs/requirements/mariadb/.dockerignore",
         "srcs/requirements/mariadb/conf/50-server.cnf",
         "srcs/requirements/mariadb/tools/mariadb-setup.go",
-
         "srcs/requirements/nginx/Dockerfile",
         "srcs/requirements/nginx/.dockerignore",
 		"srcs/requirements/nginx/conf/default.conf",
 		"srcs/requirements/nginx/tools/nginx-ssl-setup.go",
-
 		"srcs/requirements/wordpress/Dockerfile",
         "srcs/requirements/wordpress/.dockerignore",
 		"srcs/requirements/wordpress/conf/WWW.conf",
@@ -77,3 +72,5 @@ func main() {
     // Print success message
     println("File hierarchy created successfully.")
 }
+
+// go run create-files-hierarchia.go
