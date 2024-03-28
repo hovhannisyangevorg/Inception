@@ -1,5 +1,5 @@
 package main
-
+//sudo -E go run generate_ssl_cert.go 
 import (
 	"fmt"
 	// "log"
@@ -17,12 +17,29 @@ func generateSSLcart() {
 	commonName 			:= os.Getenv("COMMON_NAME")
 	days 				:= "365"
 
+	// TODO: i need remove the
+	file, err := os.Create(pathCerts)
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+	os.Chmod(pathCerts, 0755)
+	
+	// TODO: i need remove the
+	keyFile, err := os.Create(pathPrivateKey)
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer keyFile.Close()
+	os.Chmod(pathPrivateKey, 0755)
 	cmd := exec.Command("openssl", "req", "-x509", "-nodes", "-days", days, "-newkey", "rsa:2048", "-keyout", pathPrivateKey, "-out", pathCerts, "-subj", fmt.Sprintf("/C=%s/L=%s/O=%s/OU=%s/CN=%s", country, location, organization, organizationUnit, commonName))
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	if err != nil {
+	
+	
+	if err := cmd.Run(); err != nil {
 		fmt.Fprintf(cmd.Stderr , "%s\n", err)
 		os.Exit(1)
 	}
@@ -39,23 +56,24 @@ func execCommand(cmd *exec.Cmd) {
 }
 
 func main() {
-	// dirPath := "/etc/nginx/sites-available/"
-    // domainName := os.Getenv("COMMON_NAME")
-    // pathCerts := os.Getenv("PATH_CERTS")
-    // pathPrivateKey := os.Getenv("PATH_PRIVATE_KEY")
+	dirPath := "/etc/nginx/sites-available/"
+	domainName := os.Getenv("COMMON_NAME")
+	pathCerts := os.Getenv("PATH_CERTS")
+	pathPrivateKey := os.Getenv("PATH_PRIVATE_KEY")
 
 	generateSSLcart()
 	
-	// err := os.Chdir(dirPath)
-	// if err != nil {
-	// 	fmt.Fprintf(os.Stderr, "%s\n", err)
-    //     os.Exit(1)
-	// }
-	// if _, err := os.Stat("./default.conf"); err == nil {
-	// 	execCommand(exec.Command("sed", "-i", fmt.Sprintf("s#\\$DOMAIN_NAME#%s#g", domainName), "default.conf"))
-	// 	execCommand(exec.Command("sed", "-i", fmt.Sprintf("s#\\$PATH_CERTS#%s#g", pathCerts), "default.conf"))
-	// 	execCommand(exec.Command("sed", "-i", fmt.Sprintf("s#\\$PATH_PRIVATE_KEY#%s#g", pathPrivateKey), "default.conf"))
-	// }
+	err := os.Chdir(dirPath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
+	if _, err := os.Stat("./default.conf"); err == nil {
+		execCommand(exec.Command("sed", "-i", fmt.Sprintf("s#\\$DOMAIN_NAME#%s#g", domainName), "default.conf"))
+		execCommand(exec.Command("sed", "-i", fmt.Sprintf("s#\\$PATH_CERTS#%s#g", pathCerts), "default.conf"))
+		execCommand(exec.Command("sed", "-i", fmt.Sprintf("s#\\$PATH_PRIVATE_KEY#%s#g", pathPrivateKey), "default.conf"))
+	}
+
 	// cmd := exec.Command("cat", "default.conf", ">", "default")
 	// cmd.Stdout = os.Stdout
     // cmd.Stderr = os.Stderr
