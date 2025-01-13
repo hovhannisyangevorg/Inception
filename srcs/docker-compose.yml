@@ -1,1 +1,29 @@
-#hello
+version: '3'
+
+networks:
+  bridge-network-inception:
+    driver: bridge # Creates an isolated private network\
+
+volumes:
+  nx_wp_volume:
+    driver: local
+    driver_opts:
+      device: /home/gehovhan/data/            # Path on the host for nginx and WordPress.
+      o: bind                                 # Bind mount option
+      type: none                              # No filesystem type
+
+services:
+  nginx:
+    container_name: nginx
+    build:          ./requirements/nginx/
+#    depends_on:
+#      - wordpress
+#    restart: always
+    volumes:
+      - nx_wp_volume:/usr/share/nginx/html
+    networks:
+      - bridge-network-inception
+    env_file:
+      - ../.env-struts
+    ports:
+      - "443:443"
