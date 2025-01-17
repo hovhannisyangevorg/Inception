@@ -1,13 +1,12 @@
-FROM alpine:3.19
+FROM debian:buster
 
 # Set build arguments for NGINX configuration paths
 ARG NGINX_CONFIG_PATH_IN_CONTAINER=/etc/nginx/sites-available/
 ARG NGINX_CONFIG_PATH_HOST=/conf/default.conf
 
 # Update package repository, install required packages, and clean up
-RUN apk update && apk upgrade && \
-    apk add --no-cache nginx openssl go bash && \
-    rm -rf /var/cache/apk/*
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y nginx openssl && rm -rf /var/lib/apt/lists/*
 
 # Copy NGINX configuration into the container
 COPY ${NGINX_CONFIG_PATH_HOST} ${NGINX_CONFIG_PATH_IN_CONTAINER}
@@ -17,9 +16,6 @@ WORKDIR /Inception/srcs/requirements/nginx/tools
 
 # Copy the setup script
 COPY /tools/nginx_setup.sh .
-
-# Expose port 443 for HTTPS traffic
-EXPOSE 443
 
 # Ensure the setup script is executable
 RUN chmod +x nginx_setup.sh

@@ -18,12 +18,13 @@ services:
     build:          ./requirements/nginx/
 #    depends_on:
 #      - wordpress
-#    restart: always
+    restart: always
     volumes:
-      - nx_wp_volume:/usr/share/nginx/html
+      - nx_wp_volume:/var/www/html
     networks:
       - bridge-network-inception
     env_file:
       - ../.env-struts
     ports:
       - "443:443"
+      - "80:80"
