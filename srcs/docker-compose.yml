@@ -1,30 +1,108 @@
-version: '3'
-
-networks:
-  bridge-network-inception:
-    driver: bridge # Creates an isolated private network\
-
-volumes:
-  nx_wp_volume:
-    driver: local
-    driver_opts:
-      device: /home/gehovhan/data/            # Path on the host for nginx and WordPress.
-      o: bind                                 # Bind mount option
-      type: none                              # No filesystem type
+version: '3.8'
 
 services:
   nginx:
     container_name: nginx
-    build:          ./requirements/nginx/
-#    depends_on:
-#      - wordpress
+    build: ./requirements/nginx/
+    depends_on:
+      - mariadb
+    # - wordpress
     restart: always
     volumes:
       - nx_wp_volume:/var/www/html
     networks:
       - bridge-network-inception
     env_file:
-      - ../.env-struts
+      - ../.env-structs
     ports:
       - "443:443"
-      - "80:80"
+
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    volumes:
+      - db_data:/var/lib/mysql
+      - db_logs:/var/log/mysql
+      - db_tmp:/tmp
+      - db_config:/etc/mysql
+    networks:
+      - bridge-network-inception
+    env_file:
+      - $ROOT_DIRECTORY_INCEPTION/srcs/.env
+      - $ROOT_DIRECTORY_INCEPTION/secrets/db_password.txt
+      - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
+    restart: always
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      device: /home/$USER/data/mariadb
+      o: bind
+      type: none
+  db_logs:
+    driver: local
+    driver_opts:
+      device: /home/$USER/data/mariadb_logs
+      o: bind
+      type: none
+  db_tmp:
+    driver: local
+    driver_opts:
+      device: /home/$USER/data/mariadb_tmp
+      o: bind
+      type: none
+  db_config:
+    driver: local
+    driver_opts:
+      device: /home/$USER/data/mariadb_config
+      o: bind
+      type: none
+
+
+
+networks:
+  bridge-network-inception:
+    driver: bridge
+
+#services:
+#  nginx:
+#    container_name: nginx
+#    build:          ./requirements/nginx/
+#    depends_on:
+#      - mariadb
+##      - wordpress
+#    restart: always
+#    volumes:
+#      - nx_wp_volume:/var/www/html
+#    networks:
+#      - bridge-network-inception
+#    env_file:
+#      - ../.env-structs
+#    ports:
+#      - "443:443"
+
+
+
+
+#  wordpress:
+#    container_name: wordpress
+#    build:          ./requirements/wordpress/
+#    depends_on:
+#      - mariadb
+#    volumes:
+#      - nx_wp_volume:/var/www/html/
+#    restart: always
+#    networks:
+#      - bridge-network-inception
+#    env_file:
+#      - .env-structs
+
+
+
+
+#secrets:
+#  db_password:
+#    file: ./secrets/db_password.txt
+#  db_root_password:
+#    file: ./secrets/db_root_password.txt

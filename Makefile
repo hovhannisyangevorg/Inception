@@ -1,13 +1,41 @@
-SERVICE = $(c) 									# Service name passed as an argument
-COMPOSE_FILE = ./srcs/docker-compose.yml
+SERVICE = $(c)
+ROOT_DIRECTORY = $(shell git rev-parse --show-toplevel)
 
-# Start the specified service in detached mode
 up:
-	docker-compose -f $(COMPOSE_FILE) up --build -d $(SERVICE)
+	export ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" && docker-compose -f $(ROOT_DIRECTORY)/srcs/docker-compose.yml up --build -d
 
-# Stop and remove all containers defined in the Compose file
 down:
-	docker-compose -f $(COMPOSE_FILE) down
+	export ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" && docker-compose -f $(ROOT_DIRECTORY)/srcs/docker-compose.yml down -v
+
+
+
+
+
+
+
+
+
+
+
+
+
+# TODO: root_directory_path redirect in top level .env file after push ...
+#SERVICE = $(c)
+#ROOT_DIRECTORY = $(shell git rev-parse --show-toplevel)
+#
+#setrootdir:
+#	@sed -i "s#root_directory_path#export ROOT_DIRECTORY_INCEPTION=\"$(ROOT_DIRECTORY)\"#g" ~/.bashrc
+#	@bash -i -c "source ~/.bashrc"
+#
+#unsetrootdir:
+#	@sed -i "s#export ROOT_DIRECTORY_INCEPTION=\"$(ROOT_DIRECTORY)\"#root_directory_path#g" ~/.bashrc
+#	@bash -i -c "source ~/.bashrc"
+#
+#up: setrootdir
+#	docker-compose -f $(ROOT_DIRECTORY)/srcs/docker-compose.yml up --build -d
+#
+#down: unsetrootdir
+#	docker-compose -f $(COMPOSE_FILE) down -v
 
 # Stop the specified service
 #stop:
@@ -20,5 +48,13 @@ down:
 # List containers and their status
 #ps:
 #	docker-compose -f $(COMPOSE_FILE) ps
+
+#clean-docker:
+#	docker system prune -a -f
+
+#.PHONY: clean-docker
+
+
+
 
 
