@@ -8,7 +8,8 @@ down:
 	export ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" && docker-compose -f $(ROOT_DIRECTORY)/srcs/docker-compose.yml down -v
 
 
-
+vclean: down
+	@bash ./volumes-tools-local/clean-volume.sh
 
 
 

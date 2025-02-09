@@ -11,6 +11,10 @@ tmpdir                  = /tmp
 lc-messages-dir         = /usr/share/mysql
 bind-address            = 0.0.0.0
 
+#innodb_log_group_home_dir = /var/lib/mysql/
+#innodb_log_file_size = 150M
+
+
 # Enable general log
 general_log             = 1
 general_log_file        = /var/log/mysql/general.log

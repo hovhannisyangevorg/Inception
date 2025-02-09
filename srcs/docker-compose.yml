@@ -1,21 +1,21 @@
 version: '3.8'
 
 services:
-  nginx:
-    container_name: nginx
-    build: ./requirements/nginx/
-    depends_on:
-      - mariadb
-    # - wordpress
-    restart: always
-    volumes:
-      - nx_wp_volume:/var/www/html
-    networks:
-      - bridge-network-inception
-    env_file:
-      - ../.env-structs
-    ports:
-      - "443:443"
+#  nginx:
+#    container_name: nginx
+#    build: ./requirements/nginx/
+#    depends_on:
+#      - mariadb
+#    # - wordpress
+#    restart: always
+#    volumes:
+#      - nx_wp_volume:/var/www/html
+#    networks:
+#      - bridge-network-inception
+#    env_file:
+#      - ../.env-structs
+#    ports:
+#      - "443:443"
 
   mariadb:
     container_name: mariadb
@@ -31,8 +31,9 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
-    restart: always
-
+#    restart: always
+    command:
+      - "/usr/local/bin/docker-entrypoint.sh"
 volumes:
   db_data:
     driver: local
@@ -58,8 +59,6 @@ volumes:
       device: /home/$USER/data/mariadb_config
       o: bind
       type: none
-
-
 
 networks:
   bridge-network-inception:

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 mysqld &
 pid="$!"
@@ -12,8 +12,7 @@ envsubst < /docker-entrypoint-initdb.d/initdb.sql | sponge /docker-entrypoint-in
 
 if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ];
 then
-    echo "Initializing database $MYSQL_DATABASE..."
-    mysql < /docker-entrypoint-initdb.d/initdb.sql
+      mysql -u$MYSQL_USER -p$MYSQL_PASSWORD < /docker-entrypoint-initdb.d/initdb.sql
 fi
 
 wait "$pid"
