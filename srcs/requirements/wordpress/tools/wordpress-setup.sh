@@ -2,24 +2,27 @@
 
 WP_DIR="/var/www/html"
 
-log_info() { echo -e "\033[32m[ INFO ] $1\033[0m" }
-log_error() { echo -e "\033[31m[ ERROR ] $1\033[0m" }
+log_info() { echo -e "\033[32m[ INFO ] $1\033[0m"; }
+log_error() { echo -e "\033[31m[ ERROR ] $1\033[0m"; }
 
 mkdir -p $WP_DIR
 rm -rf $WP_DIR/*
 
+# Download WordPress core
 if wp core download --allow-root --path=$WP_DIR; then
     log_info "WordPress core downloaded successfully."
 else
     log_error "Failed to download WordPress core."
 fi
 
+# Copy wp-config-sample.php to wp-config.php
 if cp $WP_DIR/wp-config-sample.php $WP_DIR/wp-config.php; then
     log_info "wp-config.php created."
 else
     log_error "Failed to create wp-config.php."
 fi
 
+# Modify wp-config.php with DB credentials
 sed -i "s/define( 'DB_NAME', '.*' );/define( 'DB_NAME', '${MYSQL_DATABASE}' );/g" $WP_DIR/wp-config.php
 sed -i "s/define( 'DB_USER', '.*' );/define( 'DB_USER', '${MYSQL_USER}' );/g" $WP_DIR/wp-config.php
 sed -i "s/define( 'DB_PASSWORD', '.*' );/define( 'DB_PASSWORD', '${MYSQL_PASSWORD}' );/g" $WP_DIR/wp-config.php
@@ -32,6 +35,7 @@ else
     log_error "Failed to install WordPress."
 fi
 
+# Check if the user exists
 if wp user get "$WORDPRESS_USER_USERNAME" --allow-root --path=$WP_DIR > /dev/null 2>&1; then
     log_info "User '$WORDPRESS_USER_USERNAME' already exists."
 else
