@@ -1,16 +1,17 @@
-FROM debian:stable-slim
+FROM        debian:bullseye
 
-RUN apt -y update && apt -y upgrade && \
-    apt -y install mariadb-server mariadb-client gettext moreutils tini
+LABEL       "author"="gehovhan"
 
-RUN mkdir -p /var/lib/mysql /run/mysqld /usr/share/mysql /var/log/mysql && \
-    chown -R mysql:mysql /var/lib/mysql /run/mysqld /usr/share/mysql /var/log/mysql && \
-    chmod 755 /var/lib/mysql /run/mysqld /usr/share/mysql /var/log/mysql
+RUN         apt update && apt upgrade -y && apt install -y mariadb-server mariadb-client gettext moreutils
 
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-COPY ./migrations/initdb.sql /docker-entrypoint-initdb.d/initdb.sql
-COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY        ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY        ./tools/docker-entrypoint.sh /docker-entrypoint-initdb.d/docker-entrypoint.sh
+COPY        ./migrations/initdb.sql /docker-entrypoint-initdb.d/initdb.sql
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN         chmod 766 /docker-entrypoint-initdb.d/docker-entrypoint.sh && chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN         echo "alias mysqlstart='/usr/bin/mysqld_safe'" >> /etc/bash.bashrc
 
-#ENTRYPOINT ["/usr/bin/tini", "--"]
+ENTRYPOINT  ["/docker-entrypoint-initdb.d/docker-entrypoint.sh"]
+
+CMD         ["mysqld"]
+

@@ -1,15 +1,39 @@
 SERVICE = $(c)
 ROOT_DIRECTORY = $(shell git rev-parse --show-toplevel)
 
-up:
+# DIRS = /path/to/dir1 /path/to/dir2 /path/to/dir3 TODO: Create Volumse and Define Dependency.
+
+
+up: mkvolume
 	export ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" && docker-compose -f $(ROOT_DIRECTORY)/srcs/docker-compose.yml up --build -d
 
 down:
 	export ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" && docker-compose -f $(ROOT_DIRECTORY)/srcs/docker-compose.yml down -v
 
+#stop:
+#	docker stop $$(docker ps -q)
 
-vclean: down
-	@bash ./volumes-tools-local/clean-volume.sh
+#clean:
+#	docker rmi -f $$(docker images -q) || true
+
+fclean: down vclean
+	docker builder prune -a -f
+	docker image prune -a -f
+	docker container prune -f
+	docker volume prune -f
+	docker network prune -f
+	docker system prune -a -f
+
+vclean:
+	rm -rf  ~/data/wordpress/*
+	rm -rf  ~/data/mariadb/*
+
+mkvolume:
+	mkdir -p ~/data/wordpress
+	mkdir -p ~/data/mariadb
+
+logs:
+	@docker logs $(SERVICE)
 
 
 
@@ -19,8 +43,6 @@ vclean: down
 
 
 
-
-# TODO: root_directory_path redirect in top level .env file after push ...
 #SERVICE = $(c)
 #ROOT_DIRECTORY = $(shell git rev-parse --show-toplevel)
 #
