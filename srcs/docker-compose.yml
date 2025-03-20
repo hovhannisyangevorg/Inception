@@ -18,6 +18,13 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    mem_limit: 1G
+    cpus: 0.5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
 
   mariadb:
     build: ./requirements/mariadb/
@@ -32,6 +39,13 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
+    mem_limit: 5G
+    cpus: 2.0
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
 
   wordpress:
     build: ./requirements/wordpress/
@@ -50,6 +64,13 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/wp_admin_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/wp_user_password.txt
+    mem_limit: 1G
+    cpus: 1.5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
 
 volumes:
   nx_wp_data:
