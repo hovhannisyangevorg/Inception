@@ -7,7 +7,8 @@ services:
     build: ./requirements/nginx/
     depends_on:
       - mariadb
-    restart: always
+      - wordpress
+#    restart: always
     volumes:
       - nx_wp_data:/var/www/html
     networks:
@@ -16,12 +17,13 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
     ports:
       - "443:443"
+      - "80:80"
 
   mariadb:
     build: ./requirements/mariadb/
     image: mariadb
     container_name: mariadb
-    restart: always
+#    restart: always
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -46,8 +48,8 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
-#      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_admin_password.txt
-#      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_user_password.txt
+      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_admin_password.txt
+      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_user_password.txt
 
 volumes:
   nx_wp_data:

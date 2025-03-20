@@ -1,5 +1,7 @@
 FROM debian:bullseye
 
+LABEL "author"="gehovhan"
+
 ENV PHP_VERSION=7.4
 
 RUN apt update \
@@ -21,8 +23,6 @@ RUN sed -i "s/listen = .*/listen = 0.0.0.0:9000/" /etc/php/${PHP_VERSION}/fpm/po
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./tools/wordpress-setup.sh /wp/scripts/wordpress-setup.sh
-
-EXPOSE 9000
 
 RUN chmod +x /wp/scripts/wordpress-setup.sh
 
