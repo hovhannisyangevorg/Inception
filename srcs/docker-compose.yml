@@ -40,8 +40,8 @@ services:
 #    restart: always
     depends_on:
       - mariadb
-#    volumes:
-#      - nx_wp_data:/var/www/html/
+    volumes:
+      - nx_wp_data:/var/www/html/
     networks:
       - bridge-network-inception
     env_file:

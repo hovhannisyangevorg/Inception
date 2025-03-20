@@ -20,12 +20,19 @@ RUN apt update \
 
 RUN sed -i "s/listen = .*/listen = 0.0.0.0:9000/" /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp && \
+    ln -s /usr/local/bin/wp /usr/local/bin/wp-cli
 
 COPY ./tools/wordpress-setup.sh /wp/scripts/wordpress-setup.sh
 
 RUN chmod +x /wp/scripts/wordpress-setup.sh
 
+RUN mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html
+RUN mkdir -p /run/php && chown -R www-data:www-data /run/php
+
+WORKDIR /var/www/html
 ENTRYPOINT ["/wp/scripts/wordpress-setup.sh"]
 
 CMD ["php-fpm7.4", "-F"]
