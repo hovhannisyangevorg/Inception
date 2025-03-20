@@ -20,6 +20,6 @@ clean: down
 
 init:
 	@echo "Initializing server and creating volumes..."
-	@./init-server/volume-make.sh
+	@./init-server/make-volumes/volume-make.sh
 
 .PHONY: up down fclean vclean mkvolume
