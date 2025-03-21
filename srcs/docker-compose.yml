@@ -8,7 +8,7 @@ services:
     depends_on:
       - mariadb
       - wordpress
-#    restart: always
+    restart: always
     volumes:
       - nx_wp_data:/var/www/html
     networks:
@@ -30,7 +30,7 @@ services:
     build: ./requirements/mariadb/
     image: mariadb
     container_name: mariadb
-#    restart: always
+    restart: always
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -51,7 +51,7 @@ services:
     build: ./requirements/wordpress/
     container_name: wordpress
     image: wordpress
-#    restart: always
+    restart: always
     depends_on:
       - mariadb
     volumes:
@@ -62,7 +62,7 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
-      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_admin_password.txt
+      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_root_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/wp_user_password.txt
     mem_limit: 1G
     cpus: 1.5

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-set -e
-
 log_info() { echo -e "\033[32m[ INFO ] $1\033[0m"; }
 log_error() { echo -e "\033[31m[ ERROR ] $1\033[0m"; }
+
+mkdir -p /run/php && chmod 777 -R /run/php && chown -R www-data:www-data /run/php
 
 log_info "Removing existing files from the /var/www/html."
 rm -rf /var/www/html/*

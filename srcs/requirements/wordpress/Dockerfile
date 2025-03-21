@@ -7,6 +7,7 @@ ENV PHP_VERSION=7.4
 RUN apt update \
 	&& apt upgrade -y \
 	&& apt install -y \
+    sendmail  \
 	curl \
 	php${PHP_VERSION} \
 	php${PHP_VERSION}-mysql \
@@ -28,9 +29,6 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 COPY ./tools/wordpress-setup.sh /wp/scripts/wordpress-setup.sh
 
 RUN chmod +x /wp/scripts/wordpress-setup.sh
-
-RUN mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html
-RUN mkdir -p /run/php && chown -R www-data:www-data /run/php
 
 WORKDIR /var/www/html
 ENTRYPOINT ["/wp/scripts/wordpress-setup.sh"]
