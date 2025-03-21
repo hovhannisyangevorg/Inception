@@ -62,7 +62,7 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/db_root_password.txt
-      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_admin_password.txt
+      - $ROOT_DIRECTORY_INCEPTION/secrets/wp_root_password.txt
       - $ROOT_DIRECTORY_INCEPTION/secrets/wp_user_password.txt
     mem_limit: 1G
     cpus: 1.5

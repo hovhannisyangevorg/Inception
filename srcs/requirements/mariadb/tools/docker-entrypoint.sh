@@ -12,13 +12,12 @@ then
 	mysql_install_db;
   /usr/bin/mysqld_safe &
   sleep 3;
-	envsubst < /docker-entrypoint-initdb.d/initdb.sql | sponge /docker-entrypoint-initdb.d/initdb.sql
-	cat /docker-entrypoint-initdb.d/initdb.sql > /dev/stderr
-	mariadb < /docker-entrypoint-initdb.d/initdb.sql;
+	envsubst < /docker-entrypoint-initdb.d/2025_03_21_202644_initdb.sql | sponge /docker-entrypoint-initdb.d/2025_03_21_202644_initdb.sql
+	mariadb < /docker-entrypoint-initdb.d/2025_03_21_202644_initdb.sql;
 	mysqladmin -u root password $MYSQL_ROOT_PASSWORD;
 	mysqladmin -u root -p$MYSQL_ROOT_PASSWORD shutdown;
 fi
 
-#rm -rf /docker-entrypoint-initdb.d/docker-entrypoint.sh /docker-entrypoint-initdb.d/initdb.sql
+rm -rf /docker-entrypoint-initdb.d/docker-entrypoint.sh /docker-entrypoint-initdb.d/2025_03_21_202644_initdb.sql
 
 exec "$@";

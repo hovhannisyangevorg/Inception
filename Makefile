@@ -5,6 +5,11 @@ up: init
 	@ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" \
 		docker-compose -f "$(ROOT_DIRECTORY)/srcs/docker-compose.yml" up --build -d
 
+re: fclean up
+	@echo "Recompiling the project and rebuilding all services..."
+	@$(MAKE) fclean
+	@$(MAKE) up
+
 down:
 	@echo "Stopping and removing containers..."
 	@ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" \
