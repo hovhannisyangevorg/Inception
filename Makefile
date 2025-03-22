@@ -1,5 +1,7 @@
 ROOT_DIRECTORY = $(shell git rev-parse --show-toplevel)
 
+.DEFAULT_GOAL := up
+
 up: init
 	@ROOT_DIRECTORY_INCEPTION="$(ROOT_DIRECTORY)" docker-compose -f "$(ROOT_DIRECTORY)/srcs/docker-compose.yml" up --build -d
 
