@@ -17,7 +17,6 @@ services:
       - $ROOT_DIRECTORY_INCEPTION/srcs/.env
     ports:
       - "443:443"
-      - "80:80"
     mem_limit: 1G
     cpus: 0.5
     logging:
