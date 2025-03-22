@@ -7,7 +7,6 @@ ENV PHP_VERSION=7.4
 RUN apt update \
 	&& apt upgrade -y \
 	&& apt install -y \
-    sendmail  \
 	curl \
 	php${PHP_VERSION} \
 	php${PHP_VERSION}-mysql \
