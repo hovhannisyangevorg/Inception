@@ -8,7 +8,6 @@ down:
 
 re: fclean up
 
-
 fclean: clean
 	@docker system prune -a -f
 	@docker volume prune -f
